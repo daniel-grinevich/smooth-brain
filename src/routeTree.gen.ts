@@ -18,9 +18,10 @@ import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthedPostsRouteImport } from './routes/_authed/posts.route'
 import { Route as AuthedPostsIndexImport } from './routes/_authed/posts.index'
-import { Route as AuthedArticleIndexImport } from './routes/_authed/article/index'
+import { Route as AuthedArticlesIndexImport } from './routes/_authed/articles/index'
 import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts.$postId'
-import { Route as AuthedArticleArticleIdImport } from './routes/_authed/article/$articleId'
+import { Route as AuthedArticlesNewImport } from './routes/_authed/articles/new'
+import { Route as AuthedArticlesArticleIdImport } from './routes/_authed/articles/$articleId'
 
 // Create/Update Routes
 
@@ -65,9 +66,9 @@ const AuthedPostsIndexRoute = AuthedPostsIndexImport.update({
   getParentRoute: () => AuthedPostsRouteRoute,
 } as any)
 
-const AuthedArticleIndexRoute = AuthedArticleIndexImport.update({
-  id: '/article/',
-  path: '/article/',
+const AuthedArticlesIndexRoute = AuthedArticlesIndexImport.update({
+  id: '/articles/',
+  path: '/articles/',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -77,9 +78,15 @@ const AuthedPostsPostIdRoute = AuthedPostsPostIdImport.update({
   getParentRoute: () => AuthedPostsRouteRoute,
 } as any)
 
-const AuthedArticleArticleIdRoute = AuthedArticleArticleIdImport.update({
-  id: '/article/$articleId',
-  path: '/article/$articleId',
+const AuthedArticlesNewRoute = AuthedArticlesNewImport.update({
+  id: '/articles/new',
+  path: '/articles/new',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedArticlesArticleIdRoute = AuthedArticlesArticleIdImport.update({
+  id: '/articles/$articleId',
+  path: '/articles/$articleId',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -129,11 +136,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedPostsRouteImport
       parentRoute: typeof AuthedImport
     }
-    '/_authed/article/$articleId': {
-      id: '/_authed/article/$articleId'
-      path: '/article/$articleId'
-      fullPath: '/article/$articleId'
-      preLoaderRoute: typeof AuthedArticleArticleIdImport
+    '/_authed/articles/$articleId': {
+      id: '/_authed/articles/$articleId'
+      path: '/articles/$articleId'
+      fullPath: '/articles/$articleId'
+      preLoaderRoute: typeof AuthedArticlesArticleIdImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/articles/new': {
+      id: '/_authed/articles/new'
+      path: '/articles/new'
+      fullPath: '/articles/new'
+      preLoaderRoute: typeof AuthedArticlesNewImport
       parentRoute: typeof AuthedImport
     }
     '/_authed/posts/$postId': {
@@ -143,11 +157,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedPostsPostIdImport
       parentRoute: typeof AuthedPostsRouteImport
     }
-    '/_authed/article/': {
-      id: '/_authed/article/'
-      path: '/article'
-      fullPath: '/article'
-      preLoaderRoute: typeof AuthedArticleIndexImport
+    '/_authed/articles/': {
+      id: '/_authed/articles/'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof AuthedArticlesIndexImport
       parentRoute: typeof AuthedImport
     }
     '/_authed/posts/': {
@@ -177,14 +191,16 @@ const AuthedPostsRouteRouteWithChildren =
 
 interface AuthedRouteChildren {
   AuthedPostsRouteRoute: typeof AuthedPostsRouteRouteWithChildren
-  AuthedArticleArticleIdRoute: typeof AuthedArticleArticleIdRoute
-  AuthedArticleIndexRoute: typeof AuthedArticleIndexRoute
+  AuthedArticlesArticleIdRoute: typeof AuthedArticlesArticleIdRoute
+  AuthedArticlesNewRoute: typeof AuthedArticlesNewRoute
+  AuthedArticlesIndexRoute: typeof AuthedArticlesIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedPostsRouteRoute: AuthedPostsRouteRouteWithChildren,
-  AuthedArticleArticleIdRoute: AuthedArticleArticleIdRoute,
-  AuthedArticleIndexRoute: AuthedArticleIndexRoute,
+  AuthedArticlesArticleIdRoute: AuthedArticlesArticleIdRoute,
+  AuthedArticlesNewRoute: AuthedArticlesNewRoute,
+  AuthedArticlesIndexRoute: AuthedArticlesIndexRoute,
 }
 
 const AuthedRouteWithChildren =
@@ -197,9 +213,10 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/posts': typeof AuthedPostsRouteRouteWithChildren
-  '/article/$articleId': typeof AuthedArticleArticleIdRoute
+  '/articles/$articleId': typeof AuthedArticlesArticleIdRoute
+  '/articles/new': typeof AuthedArticlesNewRoute
   '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/article': typeof AuthedArticleIndexRoute
+  '/articles': typeof AuthedArticlesIndexRoute
   '/posts/': typeof AuthedPostsIndexRoute
 }
 
@@ -209,9 +226,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
-  '/article/$articleId': typeof AuthedArticleArticleIdRoute
+  '/articles/$articleId': typeof AuthedArticlesArticleIdRoute
+  '/articles/new': typeof AuthedArticlesNewRoute
   '/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/article': typeof AuthedArticleIndexRoute
+  '/articles': typeof AuthedArticlesIndexRoute
   '/posts': typeof AuthedPostsIndexRoute
 }
 
@@ -223,9 +241,10 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/_authed/posts': typeof AuthedPostsRouteRouteWithChildren
-  '/_authed/article/$articleId': typeof AuthedArticleArticleIdRoute
+  '/_authed/articles/$articleId': typeof AuthedArticlesArticleIdRoute
+  '/_authed/articles/new': typeof AuthedArticlesNewRoute
   '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
-  '/_authed/article/': typeof AuthedArticleIndexRoute
+  '/_authed/articles/': typeof AuthedArticlesIndexRoute
   '/_authed/posts/': typeof AuthedPostsIndexRoute
 }
 
@@ -238,9 +257,10 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/posts'
-    | '/article/$articleId'
+    | '/articles/$articleId'
+    | '/articles/new'
     | '/posts/$postId'
-    | '/article'
+    | '/articles'
     | '/posts/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -249,9 +269,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
-    | '/article/$articleId'
+    | '/articles/$articleId'
+    | '/articles/new'
     | '/posts/$postId'
-    | '/article'
+    | '/articles'
     | '/posts'
   id:
     | '__root__'
@@ -261,9 +282,10 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/_authed/posts'
-    | '/_authed/article/$articleId'
+    | '/_authed/articles/$articleId'
+    | '/_authed/articles/new'
     | '/_authed/posts/$postId'
-    | '/_authed/article/'
+    | '/_authed/articles/'
     | '/_authed/posts/'
   fileRoutesById: FileRoutesById
 }
@@ -308,8 +330,9 @@ export const routeTree = rootRoute
       "filePath": "_authed.tsx",
       "children": [
         "/_authed/posts",
-        "/_authed/article/$articleId",
-        "/_authed/article/"
+        "/_authed/articles/$articleId",
+        "/_authed/articles/new",
+        "/_authed/articles/"
       ]
     },
     "/login": {
@@ -329,16 +352,20 @@ export const routeTree = rootRoute
         "/_authed/posts/"
       ]
     },
-    "/_authed/article/$articleId": {
-      "filePath": "_authed/article/$articleId.tsx",
+    "/_authed/articles/$articleId": {
+      "filePath": "_authed/articles/$articleId.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/articles/new": {
+      "filePath": "_authed/articles/new.tsx",
       "parent": "/_authed"
     },
     "/_authed/posts/$postId": {
       "filePath": "_authed/posts.$postId.tsx",
       "parent": "/_authed/posts"
     },
-    "/_authed/article/": {
-      "filePath": "_authed/article/index.tsx",
+    "/_authed/articles/": {
+      "filePath": "_authed/articles/index.tsx",
       "parent": "/_authed"
     },
     "/_authed/posts/": {

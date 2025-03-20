@@ -119,6 +119,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           >
             Posts
           </Link>
+          <Link
+            to="/articles"
+          >
+            Articles
+          </Link>
           <div className="ml-auto">
             {user ? (
               <>

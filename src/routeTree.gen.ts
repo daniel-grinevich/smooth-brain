@@ -18,10 +18,10 @@ import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthedPostsRouteImport } from './routes/_authed/posts.route'
 import { Route as AuthedPostsIndexImport } from './routes/_authed/posts.index'
-import { Route as AuthedArticlesIndexImport } from './routes/_authed/articles/index'
+import { Route as AuthedArticlesIndexImport } from './routes/_authed/articles.index'
 import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts.$postId'
-import { Route as AuthedArticlesNewImport } from './routes/_authed/articles/new'
-import { Route as AuthedArticlesArticleIdImport } from './routes/_authed/articles/$articleId'
+import { Route as AuthedArticlesNewImport } from './routes/_authed/articles.new'
+import { Route as AuthedArticlesArticleIdImport } from './routes/_authed/articles.$articleId'
 
 // Create/Update Routes
 
@@ -353,11 +353,11 @@ export const routeTree = rootRoute
       ]
     },
     "/_authed/articles/$articleId": {
-      "filePath": "_authed/articles/$articleId.tsx",
+      "filePath": "_authed/articles.$articleId.tsx",
       "parent": "/_authed"
     },
     "/_authed/articles/new": {
-      "filePath": "_authed/articles/new.tsx",
+      "filePath": "_authed/articles.new.tsx",
       "parent": "/_authed"
     },
     "/_authed/posts/$postId": {
@@ -365,7 +365,7 @@ export const routeTree = rootRoute
       "parent": "/_authed/posts"
     },
     "/_authed/articles/": {
-      "filePath": "_authed/articles/index.tsx",
+      "filePath": "_authed/articles.index.tsx",
       "parent": "/_authed"
     },
     "/_authed/posts/": {

@@ -1,27 +1,37 @@
-import React from 'react'
-import { useFieldContext } from '../formContext'
+import { useStore } from '@tanstack/react-form'
+import { useFieldContext } from '~/hooks/form-context'
 
-export function SelectField({ 
-  label,
-  options
-}: { 
+interface SelectFieldProps {
   label: string;
   options: { value: string; label: string }[];
-}) {
+  divStyle?: string;
+  labelStyle?: string;
+  selectStyle?: string;
+  errorStyle?: string;
+}
+
+export default function SelectField({
+  label,
+  options,
+  divStyle = "mb-4",
+  labelStyle = "block text-sm font-medium text-gray-700 mb-1",
+  selectStyle = "w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500",
+  errorStyle = "mt-1 text-sm text-red-500",
+}: SelectFieldProps) {
   const field = useFieldContext<string>()
-  const { meta } = field.state
-  const hasError = meta.errors.length > 0
-  
+
+  const value = useStore(field.store, (state) => state.value)
+  const errors = useStore(field.store, (state) => state.meta.errors)
+  const touched = useStore(field.store, (state) => state.meta.isTouched)
+
   return (
-    <div className="mb-4">
-      <label className="block mb-1 font-medium">{label}</label>
+    <div className={divStyle}>
+      <label className={labelStyle}>{label}</label>
       <select
-        value={field.state.value}
+        className={selectStyle}
+        value={value}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={field.handleBlur}
-        className={`w-full p-2 border rounded bg-white text-black ${
-          hasError && meta.isTouched ? 'border-red-500' : 'border-gray-300'
-        }`}
       >
         <option value="">-- Select an option --</option>
         {options.map(option => (
@@ -30,8 +40,8 @@ export function SelectField({
           </option>
         ))}
       </select>
-      {hasError && meta.isTouched && (
-        <div className="text-red-500 text-sm mt-1">{meta.errors[0]}</div>
+      {touched && errors.length > 0 && (
+        <em className={errorStyle}>{errors[0]}</em>
       )}
     </div>
   )

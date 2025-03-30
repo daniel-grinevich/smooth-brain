@@ -1,25 +1,38 @@
-import React from 'react'
-import { useFieldContext } from '../formContext'
+import { useFieldContext } from '~/hooks/form-context'
+import { useStore } from '@tanstack/react-form'
 
-export function TextAreaField({ label }: { label: string }) {
+interface TextAreaFieldProps {
+  label: string
+  divStyle?: string
+  labelStyle?: string
+  textAreaStyle?: string
+  errorStyle?: string
+}
+
+export default function TextAreaField({
+  label,
+  divStyle = "mb-4",
+  labelStyle = "block text-sm font-medium text-gray-700 mb-1",
+  textAreaStyle = "w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500",
+  errorStyle = "mt-1 text-sm text-red-500",
+}: TextAreaFieldProps) {
   const field = useFieldContext<string>()
-  const { meta } = field.state
-  const hasError = meta.errors.length > 0
-  
+  const errors = useStore(field.store, (state) => state.meta.errors)
+
   return (
-    <div className="mb-4">
-      <label className="block mb-1 font-medium">{label}</label>
+    <div className={divStyle}>
+      <label className={labelStyle}>{label}</label>
       <textarea
+        className={textAreaStyle}
         value={field.state.value}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={field.handleBlur}
-        className={`w-full p-2 border rounded bg-white text-black h-64 ${
-          hasError && meta.isTouched ? 'border-red-500' : 'border-gray-300'
-        }`}
       />
-      {hasError && meta.isTouched && (
-        <div className="text-red-500 text-sm mt-1">{meta.errors[0]}</div>
-      )}
+      {errors.map((error: string) => (
+        <div className={errorStyle} key={error}>
+          {error}
+        </div>
+      ))}
     </div>
   )
 }
